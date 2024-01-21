@@ -1,0 +1,49 @@
+{
+    "name": "audio-transcription-whisper",
+    "version": "1.0.0",
+    "description": "Service to transcribe audio files to text using the Whisper ASR API by OpenAI™",
+    "main": "index.js",
+    "scripts": {
+        "dev": "ts-node-dev --max-old-space-size=4096 --exit-child ./src/server.ts",
+        "start": "npm run build && npm run server",
+        "server": "node ./dist/server.js",
+        "test": "mocha -r ts-node/register 'test/**/*.test.ts'",
+        "prepare": "husky install",
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "seed": "ts-node prisma/seed.ts",
+        "pre-commit": "lint-staged",
+        "data-migration": "ts-node -T ./prisma/migrations/<your migration>"
+    },
+    "keywords": [],
+    "author": "Chad Dahlgren",
+    "license": "ISC",
+    "dependencies": {
+        "@fastify/cors": "^8.5.0",
+        "@prisma/client": "^5.8.1",
+        "dotenv": "^16.3.2",
+        "fastify": "^4.25.2",
+        "ffmpeg": "^0.0.4",
+        "husky": "^8.0.3"
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.5",
+        "@typescript-eslint/eslint-plugin": "^6.19.0",
+        "@typescript-eslint/parser": "^6.19.0",
+        "eslint": "^8.56.0",
+        "eslint-config-prettier": "^9.1.0",
+        "lint-staged": "^15.2.0",
+        "nodemon": "^3.0.3",
+        "prettier": "^3.2.4",
+        "prisma": "^5.8.1",
+        "ts-node": "^10.9.2",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.3.3"
+    },
+    "lint-staged": {
+        "{src,test}/**/*.{js,ts}": [
+            "eslint --fix --no-error-on-unmatched-pattern",
+            "prettier --write --ignore-unknown"
+        ]
+    }
+}

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+scripts/dev/stop
+echo ""
+scripts/dev/start

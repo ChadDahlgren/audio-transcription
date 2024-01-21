@@ -1,0 +1,27 @@
+#!/bin/bash
+
+. scripts/utils/ansi
+
+yellow() {
+  ansi --yellow $@
+}
+
+red() {
+  ansi --red $@
+}
+
+green() {
+  ansi --green $@
+}
+
+blue() {
+ ansi --cyan $@
+}
+
+brightWhite() {
+  ansi --white-intense $@
+}
+
+white() {
+  ansi --white $@
+}

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# kills the pid of the given pattern passed as an argument to this function
+kill_pattern() {
+  ps axf | grep -s $1 | grep -v grep | awk '{print "kill -9 " $1}' | bash
+}
+
+# Returns the current git revision in short form
+git_revision() {
+  echo "$(git log -1 --pretty=format:%h)"
+}
+
+# Returns the context of a file where bash is evaled as a template
+render_template() {
+eval "cat <<EOF
+$(<$@)
+EOF
+" 2> /dev/null
+}

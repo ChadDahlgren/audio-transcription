@@ -1,0 +1,31 @@
+#!/bin/bash
+
+ . scripts/utils/docker_helpers
+ . scripts/utils/colors
+
+echo ""
+yellow 'Completely reset all local docker assets?(yes/no)'
+red '*Warning* this will affect all docker containers/images/volumes on this machine'
+read confirm
+
+if [ "$confirm" != "${confirm#[Yy]}" ] ;then
+  green "Resetting docker!"
+else
+  red "Non yes answer, aborting docker reset"
+  exit
+fi
+
+scripts/dev/stop
+yellow 'Removing all running containers...'
+docker rm --force $(docker ps -aq)
+yellow 'Removing all images...'
+docker rmi --force $(docker images -aq)
+yellow 'Run docker system prune to clean up additional docker storage, volumes and resources'
+docker system prune --volumes
+echo ""
+green 'Docker reset is complete!'
+
+
+
+
+

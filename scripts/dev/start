@@ -1,0 +1,43 @@
+#!/bin/bash
+
+ . scripts/utils/docker_helpers
+ . scripts/utils/colors
+
+yellow 'Starting the environment...'
+docker-compose up -d
+
+echo "Waiting for containers to start..."
+# Wait loop for containers to be fully up and running
+until [ "$(docker inspect -f {{.State.Running}} transcription-api)" == "true" ]; do
+    sleep 1;
+    yellow "Waiting for transcription-api to be up..."
+done
+
+yellow "transcription-api is running."
+
+echo ""
+yellow "Installing dependencies..."
+run-in-transcription-api "npm install"
+
+echo ""
+scripts/dev/migrate
+
+echo ""
+yellow "Running initial build"
+run-in-transcription-api "npm run build"
+
+yellow "Generating Prisma client..."
+run-in-transcription-api "npx prisma generate"
+
+yellow "Running tsc in watcher mode..."
+# Kill any currently running watchers
+run-in-transcription-api ". scripts/utils/bash_helpers && kill_pattern '{node}.*tsc' >/dev/null 2>&1"
+run-detached-in-transcription-api "npx tsc --watch"
+green "done!"
+
+echo ""
+green 'Environment has started!'
+
+
+
+

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+ . scripts/utils/docker_helpers
+ . scripts/utils/colors
+
+echo ""
+yellow 'Starting server...'
+blue 'Server is port forwarded to localhost even though it says the host is 0.0.0.0'
+echo ""
+
+run-in-transcription-api 'npm run dev'
+
+echo ""
+green 'Server stopped!'
+
+
+
+

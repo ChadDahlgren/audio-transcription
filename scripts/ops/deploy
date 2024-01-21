@@ -1,0 +1,16 @@
+#!/bin/bash
+
+environment=$1
+
+if [ -n "$1" ]; then
+  # Build container for the current branch
+  scripts/ops/build_container_artifact && \
+  # Push the container to the artifact registry
+  scripts/ops/deploy_container_artifact && \
+  # Apply any recent kubeconfig changes
+  kubectl apply -f infrastructure/$environment/kubernetes
+  # Rolling restart the pods
+  kubectl rollout restart deployment firebox-deployment -n firebox
+else
+  echo "Environment must be given as the first argument for this command. ex: (production)"
+fi

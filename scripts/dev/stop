@@ -1,0 +1,16 @@
+#!/bin/bash
+
+ . scripts/utils/docker_helpers
+ . scripts/utils/colors
+
+yellow 'Stopping the environment...'
+echo ""
+
+dc down
+
+echo ""
+green 'Environment has stopped!'
+
+
+
+

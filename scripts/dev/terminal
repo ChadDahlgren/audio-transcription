@@ -1,0 +1,7 @@
+#!/bin/bash
+
+ . scripts/utils/docker_helpers
+ . scripts/utils/colors
+
+yellow "Opening terminal into the transcription-api docker container"
+run-in-transcription-api "bash"

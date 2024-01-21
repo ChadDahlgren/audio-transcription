@@ -1,0 +1,17 @@
+#!/bin/bash
+
+dc() {
+  docker compose "$@"
+}
+
+dce() {
+  dc exec -it "$@"
+}
+
+run-in-transcription-api() {
+  dce transcription-api bash -c "$(echo "$@")"
+}
+
+run-detached-in-transcription-api() {
+  dce -d transcription-api bash -c "$(echo "$@")"
+}

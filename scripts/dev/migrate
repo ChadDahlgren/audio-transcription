@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ . scripts/utils/docker_helpers
+ . scripts/utils/colors
+
+yellow "Building Prisma client and running migrations..."
+# Run migrations and generate
+run-in-transcription-api "npx prisma migrate dev"
+
+# Seed DB with data
+yellow "Seeding DB with data..."
+run-in-transcription-api "npm run seed"

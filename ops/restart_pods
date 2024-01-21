@@ -1,0 +1,9 @@
+#!/bin/bash
+
+environment=$1
+
+if [ -n "$1" ]; then
+  kubectl rollout restart deployment firebox-deployment -n firebox
+else
+  echo "Environment must be given as the first argument for this command. ex: (production)"
+fi

@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+    transcription-api:
+        container_name: transcription-api
+        platform: linux/x86_64 # Critical so Prisma runs correctly on a M1 Mac
+        build: ./
+        command: 'tail -f /dev/null'
+        environment:
+            - NODE_ENV=development
+            - DATABASE_URL=postgresql://new_user:new_password@transcription-db:5502/transcription?schema=public
+            - HOST=0.0.0.0
+            - PORT=5501
+        ports:
+            - 5501:5501
+            - 5500:5500 # Node inspect
+        volumes:
+            - ./:/home/app/api
+            - node_modules:/home/app/api/node_modules
+        working_dir: /home/app/api
+        restart: on-failure
+        depends_on:
+            - transcription-db
+        networks:
+            - default
+
+    transcription-db:
+        container_name: transcription-db
+        image: postgres
+        environment:
+            - POSTGRES_USER=new_user
+            - POSTGRES_DB=transcription
+            - POSTGRES_PASSWORD=new_password
+            - POSTGRES_HOST_AUTH_METHOD=trust
+            - PGDATA=/var/lib/postgresql/data/pgdata # Critical for Postgres to work in the container
+        volumes:
+            - ./db/data/postgres:/var/lib/postgresql
+        ports:
+            - 5502:5502
+
+networks:
+    default:
+
+volumes:
+    node_modules:

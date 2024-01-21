@@ -1,0 +1,11 @@
+#!/bin/bash
+
+ . scripts/utils/colors
+ . scripts/utils/bash_helpers
+
+yellow 'Deploying container firebox:$(git_revision) to Artifact registry...'
+
+# gcloud auth configure-docker us-central1-docker.pkg.dev
+# docker login https://us-central1-docker.pkg.dev
+docker tag firebox us-central1-docker.pkg.dev/allboarder-public/app-containers/firebox:latest
+docker push us-central1-docker.pkg.dev/allboarder-public/app-containers/firebox:latest

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ . scripts/utils/docker_helpers
+ . scripts/utils/colors
+
+run-in-transcription-api "$@"
