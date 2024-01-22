@@ -8,8 +8,8 @@ const execPromise = promisify(exec);
 
 export class AudioFile {
     private fileInfo: {
+        original: string;
         namePrefix: string;
-        fullName: string;
         extension: string;
         directory: string;
         fullPath: string;
@@ -31,9 +31,20 @@ export class AudioFile {
         return stdout;
     }
 
+    async convertFormat(){
+        if (this.fileInfo.fullPath) {
+            const { stdout } = await execPromise(
+                `ffmpeg -i ${this.fileInfo.directory}/${this.fileInfo.original} -acodec libmp3lame -ab 192k ${this.fileInfo.directory}/${this.fileInfo.namePrefix}.mp3`
+            ); 
+            this.fileInfo.extension = ".mp3";
+            return stdout;
+        }
+    }
+
     async split() {
         if (this.fileInfo.fullPath) {
     
+            await this.convertFormat();
             await fsPromises.mkdir(this.fileInfo.splitDirectory, { recursive: true });
             const { stdout } = await execPromise(
                 `ffmpeg -i ${this.fileInfo.fullPath} -f segment -segment_time ${this.segmentDuration} -c copy ${this.fileInfo.splitDirectory+"/"+this.fileInfo.namePrefix}-%03d.mp3`

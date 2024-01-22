@@ -44,30 +44,25 @@ fastify.post(
             const audioResponse = await audioFile.split();
 
             if (audioResponse) {
-                const apiKey = process.env.OPEN_AI_API_KEY;
-                const orgId = process.env.OPEN_AI_API_ORG_ID || '';
+                const openAIService = new OpenAIService();
+                const transcriptions = await Promise.all(
+                    audioResponse.map((audio) =>
+                        openAIService.transcribeAudio(audio)
+                    )
+                );
 
-                if (apiKey) {
-                    const openAIService = new OpenAIService(apiKey, orgId);
-                    const transcriptions = await Promise.all(
-                        audioResponse.map((audio) =>
-                            openAIService.transcribeAudio(audio)
-                        )
+                if (transcriptions) {
+                    const summary = new SummaryBuilder();
+                    await summary.setTextToSummarize(transcriptions);
+                    const summarySections = await summary.buildSummary();
+                    console.log('Summary Sections', summarySections);
+
+                    await fileManager.saveSummaryFile(summarySections);
+                    await fileManager.saveSummaryHtml(
+                        await summary.buildHtmlSummary()
                     );
 
-                    if (transcriptions) {
-                        const summary = new SummaryBuilder();
-                        await summary.setTextToSummarize(transcriptions);
-                        const summarySections = await summary.buildSummary();
-                        console.log('Summary Sections', summarySections);
-
-                        await fileManager.saveSummaryFile(summarySections);
-                        await fileManager.saveSummaryHtml(
-                            await summary.buildHtmlSummary()
-                        );
-
-                        return reply.code(200).send({ summarySections });
-                    }
+                    return reply.code(200).send({ summarySections });
                 }
             }
         } catch (err) {

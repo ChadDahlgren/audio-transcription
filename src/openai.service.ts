@@ -12,9 +12,9 @@ export class OpenAIService {
     private orgId: string;
     private model: string;
 
-    constructor(apiKey: string, orgId: string, model: string = 'gpt-4') {
-        this.openAIKey = apiKey;
-        this.orgId = orgId;
+    constructor(model: string = 'gpt-4-1106-preview') {
+        this.openAIKey = process.env.OPEN_AI_API_KEY || '';
+        this.orgId = process.env.OPEN_AI_API_ORG_ID || '';;
         this.model = model;
     }
 

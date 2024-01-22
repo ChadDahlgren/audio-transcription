@@ -2,8 +2,8 @@ import path from 'path';
 import { promises as fsPromises } from 'fs';
 
 export interface FileInfo {
+        original: string;
         namePrefix: string;
-        fullName: string;
         extension: string;
         directory: string;
         fullPath: string;
@@ -28,7 +28,6 @@ export class FileManager {
         try {
             const uniqueFileName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
             const fileExtension = path.extname(data.filename).toLowerCase();
-            const fileName = uniqueFileName + fileExtension;
 
             const dirPath = path.join(
                 __dirname,
@@ -36,17 +35,19 @@ export class FileManager {
             );
             const newFilePath = path.join(
                 dirPath,
-                `${uniqueFileName}${fileExtension}`
+                `${uniqueFileName}.mp3`
             );
+
+            const newOriginalName = uniqueFileName+"-orginal"+fileExtension;
 
             await fsPromises.mkdir(dirPath, { recursive: true });
             await fsPromises.mkdir(dirPath+"/"+this.splitDirectoryName, { recursive: true });
-            await fsPromises.writeFile(newFilePath, fileBuffer);
+            await fsPromises.writeFile(dirPath+"/"+newOriginalName, fileBuffer);
 
            return this.fileInfo = {
+                original: newOriginalName,
                 namePrefix: uniqueFileName,
-                fullName: fileName,
-                extension: fileExtension,
+                extension: ".mp3",
                 directory: dirPath,
                 fullPath: newFilePath,
                 splitDirectory: dirPath+"/"+this.splitDirectoryName
