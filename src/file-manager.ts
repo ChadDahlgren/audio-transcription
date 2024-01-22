@@ -13,7 +13,8 @@ export interface FileInfo {
 export class FileManager {
     private fileInfo: FileInfo;
     private splitDirectoryName = "split";
-    private summaryFileName = "summary.json";
+    private summaryDataName = "summary.json";
+    private summaryHtmlName = "summary.html";
     
     constructor() {
         console.log('FileManager constructor');
@@ -63,10 +64,28 @@ export class FileManager {
             );
             const newFilePath = path.join(
                 dirPath,
-                this.summaryFileName
+                this.summaryDataName
             );
 
             await fsPromises.writeFile(newFilePath, JSON.stringify(summary));
+
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async saveSummaryHtml(summary: string) {
+        try {
+            const dirPath = path.join(
+                __dirname,
+                '../audio-files/' + this.fileInfo.namePrefix
+            );
+            const newFilePath = path.join(
+                dirPath,
+                this.summaryHtmlName
+            );
+
+            await fsPromises.writeFile(newFilePath,summary);
 
         } catch (err) {
             throw err;
