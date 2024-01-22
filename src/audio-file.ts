@@ -2,6 +2,7 @@ import { exec } from 'child_process';
 import path from 'path';
 import { promises as fsPromises } from 'fs';
 import { promisify } from 'util';
+import { FileInfo } from './file-manager';
 
 const execPromise = promisify(exec);
 
@@ -14,10 +15,14 @@ export class AudioFile {
         fullPath: string;
         splitDirectory: string;
     }
-    private segmentDuration: number = 20 * 60;
-    private splitDirectoryName = "split";
+    private segmentDuration: number = 6 * 60;
 
-    constructor() {}
+    constructor() {
+    }
+
+    async setFileInfo(fileInfo: FileInfo) {
+        this.fileInfo = fileInfo;
+    }
 
     async profile() {
         const { stdout } = await execPromise(
@@ -42,37 +47,5 @@ export class AudioFile {
         const fileArray = fileList.map((file) => path.join(this.fileInfo.splitDirectory+"/", file));
 
         return fileArray;
-    }
-
-    async saveFile(data: any, fileBuffer: Buffer) {
-        try {
-            const uniqueFileName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-            const fileExtension = path.extname(data.filename).toLowerCase();
-            const fileName = uniqueFileName + fileExtension;
-
-            const dirPath = path.join(
-                __dirname,
-                '../audio-files/' + uniqueFileName
-            );
-            const newFilePath = path.join(
-                dirPath,
-                `${uniqueFileName}${fileExtension}`
-            );
-
-            await fsPromises.mkdir(dirPath, { recursive: true });
-            await fsPromises.mkdir(dirPath+"/"+this.splitDirectoryName, { recursive: true });
-            await fsPromises.writeFile(newFilePath, fileBuffer);
-
-           return this.fileInfo = {
-                namePrefix: uniqueFileName,
-                fullName: fileName,
-                extension: fileExtension,
-                directory: dirPath,
-                fullPath: newFilePath,
-                splitDirectory: dirPath+"/"+this.splitDirectoryName
-            }
-        } catch (err) {
-            throw err;
-        }
     }
 }
