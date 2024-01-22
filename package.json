@@ -2,7 +2,7 @@
     "name": "audio-transcription-whisper",
     "version": "1.0.0",
     "description": "Service to transcribe audio files to text using the Whisper ASR API by OpenAI™",
-    "main": "index.js",
+    "main": "server.js",
     "scripts": {
         "dev": "ts-node-dev --max-old-space-size=4096 --exit-child ./src/server.ts",
         "start": "npm run build && npm run server",
@@ -20,13 +20,16 @@
     "license": "ISC",
     "dependencies": {
         "@fastify/cors": "^8.5.0",
+        "@fastify/multipart": "^8.1.0",
         "@prisma/client": "^5.8.1",
         "dotenv": "^16.3.2",
         "fastify": "^4.25.2",
+        "fastify-multipart": "^5.4.0",
         "ffmpeg": "^0.0.4",
         "husky": "^8.0.3"
     },
     "devDependencies": {
+        "@types/fastify-multipart": "^0.7.0",
         "@types/node": "^20.11.5",
         "@typescript-eslint/eslint-plugin": "^6.19.0",
         "@typescript-eslint/parser": "^6.19.0",

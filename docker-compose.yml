@@ -7,12 +7,12 @@ services:
         command: 'tail -f /dev/null'
         environment:
             - NODE_ENV=development
-            - DATABASE_URL=postgresql://new_user:new_password@transcription-db:5502/transcription?schema=public
+            - DATABASE_URL=postgresql://audio_transcription_user:slo0Umbj5PSn58dxcfX10s3t+pir5baitUPMljtskZQ=@transcription-db:5432/transcription?schema=public
             - HOST=0.0.0.0
             - PORT=5501
         ports:
             - 5501:5501
-            - 5500:5500 # Node inspect
+            - 9240:5500 # Node inspect
         volumes:
             - ./:/home/app/api
             - node_modules:/home/app/api/node_modules
@@ -27,15 +27,15 @@ services:
         container_name: transcription-db
         image: postgres
         environment:
-            - POSTGRES_USER=new_user
+            - POSTGRES_USER=audio_transcription_user
             - POSTGRES_DB=transcription
-            - POSTGRES_PASSWORD=new_password
+            - POSTGRES_PASSWORD=slo0Umbj5PSn58dxcfX10s3t+pir5baitUPMljtskZQ=
             - POSTGRES_HOST_AUTH_METHOD=trust
             - PGDATA=/var/lib/postgresql/data/pgdata # Critical for Postgres to work in the container
         volumes:
             - ./db/data/postgres:/var/lib/postgresql
         ports:
-            - 5502:5502
+            - 5502:5432
 
 networks:
     default:

@@ -26,7 +26,7 @@ echo ""
 yellow "Running initial build"
 run-in-transcription-api "npm run build"
 
-yellow "Generating Prisma client..."
+# yellow "Generating Prisma client..."
 run-in-transcription-api "npx prisma generate"
 
 yellow "Running tsc in watcher mode..."

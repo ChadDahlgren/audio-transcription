@@ -1,8 +1,0 @@
-#!/bin/bash
-
-# Navigate to the root directory
-cd "$(dirname "$0")/../../"
-
-# Run the TypeScript file using ts-node
-npx ts-node ./src/db/export.db.for.seed.ts
-
